@@ -50,7 +50,7 @@ module TuringMachine
         end
 
         unless alpha.key?(sym) || sym.nil?
-          raise ArgumentError, "Unexpected replace symbol in rule - #{head}"
+          raise ArgumentError, "Unexpected replace symbol in rule - #{sym}"
         end
 
         unless DIRECT_REGEX.match direct
