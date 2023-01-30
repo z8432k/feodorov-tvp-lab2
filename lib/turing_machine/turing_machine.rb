@@ -5,7 +5,7 @@ module TuringMachine
   RIGHT = 'r'.freeze
   LEFT = 'l'.freeze
   STOP = 's'.freeze
-  DIRECT_REGEX = /^[rls]$/
+  DIRECT_REGEX = /^[rls]$/.freeze
 
   class << self
     def start(path)
@@ -73,8 +73,15 @@ module TuringMachine
       end
 
       position = data[:start]
-      state = 0
       # Тут всё готово чтобы запустить машину
+
+      run(tape, position, table)
+
+      puts "Done!"
+    end
+
+    def run(tape, position, table)
+      state = 0
 
       # Обрабатываем пока что-нить не случиться или не придём в конечный стэйт
       loop do
@@ -119,8 +126,6 @@ module TuringMachine
           state = action[:state]
         end
       end
-
-      puts "Done!"
     end
 
     def print_tape(tape, position)
