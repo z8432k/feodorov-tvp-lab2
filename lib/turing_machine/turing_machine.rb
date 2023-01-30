@@ -13,7 +13,6 @@ module TuringMachine
 
       config_path = File.realpath(path)
       data = YAML.load_file(config_path).transform_keys(&:to_sym)
-      puts data
 
       tape = NativeBtree::Btree.new(NativeBtree::Btree::INT_COMPARATOR)
 
