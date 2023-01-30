@@ -55,6 +55,9 @@ RSpec/HookArgument:
 RSpec/NestedGroups:
   Max: 5
 
+RSpec/DescribedClass:
+  Enabled: false
+
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
@@ -68,4 +71,16 @@ Bundler/OrderedGems:
   Enabled: false
 
 RSpec/MultipleExpectations:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/DefWithParentheses:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/WhileUntilDo:
   Enabled: false
