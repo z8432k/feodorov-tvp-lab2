@@ -7,21 +7,6 @@ module TuringMachine
   STOP = 's'.freeze
   DIRECT_REGEX = /^[rls]$/
 
-  class Tape
-    def initialize()
-      # code
-    end
-  end
-
-  class Config
-    def initialize(path)
-      config_path = File.realpath(path)
-      data = YAML.load_file config_path
-
-      @rules = data.rules
-    end
-  end
-
   class << self
     def start(path)
       puts "Run!"
@@ -57,7 +42,7 @@ module TuringMachine
         table[from] = {} unless table[from]
 
         if (table[from].key? head)
-          raise ArgumentError, "Rule already exists! - #{rule}"
+          raise ArgumentError, "Rule for symbol [#{head}] in state [#{from}] already exists! - #{rule}"
         end
 
         unless alpha.key? head
