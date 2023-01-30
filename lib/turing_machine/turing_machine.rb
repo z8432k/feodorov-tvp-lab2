@@ -7,34 +7,27 @@ module TuringMachine
   STOP = 's'.freeze
   DIRECT_REGEX = /^[rls]$/.freeze
 
-  class << self
-    def start(path)
-      puts "Run!"
+  class Tape
+    @tape = NativeBtree::Btree.new(NativeBtree::Btree::INT_COMPARATOR)
 
-      config_path = File.realpath(path)
-      data = YAML.load_file(config_path).transform_keys(&:to_sym)
-      puts data
-
-      tape = NativeBtree::Btree.new(NativeBtree::Btree::INT_COMPARATOR)
-
-      # Сформируем алфавит
-      alpha = {}
-      data[:alpha].each_char do |char|
-        alpha[char] = char
-      end
-      alpha[' '] = ' ' # Это тоже входит в алфавит
-
+    def initialize(str, alpha)
       # Наносим на ленту исходную строку
       idx = 0
-      data[:tape].each_char do |char|
+
+      str.each_char do |char|
         unless alpha.key? char
           raise ArgumentError, "Unexpected symbol on tape - #{char}"
         end
 
-        tape[idx] = char
+        @tape[idx] = char
         idx += 1
       end
+    end
+  end
 
+  class Table
+    @table = []
+    def initialize(rules, alpha)
       table = []
       stop_is_found = false
       data[:rules].each do |rule|
@@ -71,6 +64,36 @@ module TuringMachine
       unless stop_is_found
         raise ArgumentError, "Stop state is not found"
       end
+    end
+  end
+
+  class Machine
+    def initialize(tape, start_pos, table)
+      @tape = tape
+      @state = 0
+      @position = start_pos
+      @table = table
+    end
+  end
+
+  class << self
+    def start(path)
+      puts "Run!"
+
+      config_path = File.realpath(path)
+      data = YAML.load_file(config_path).transform_keys(&:to_sym)
+
+      # Сформируем алфавит
+      alpha = {}
+      data[:alpha].each_char do |char|
+        alpha[char] = char
+      end
+      alpha[' '] = ' ' # Это тоже входит в алфавит
+
+      tape = Tape.new(data[:tape], alpha)
+      table = Table.new(data[:rules], alpha)
+
+
 
       position = data[:start]
       # Тут всё готово чтобы запустить машину
