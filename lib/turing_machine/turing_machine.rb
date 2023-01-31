@@ -1,6 +1,7 @@
 require "yaml"
 require "native_btree"
 
+
 module TuringMachine
   RIGHT = 'r'.freeze
   LEFT = 'l'.freeze
@@ -8,13 +9,15 @@ module TuringMachine
   DIRECT_REGEX = /^[rls]$/
 
   class << self
+    include NativeBtree
+
     def start(path)
       puts "Run!"
 
       config_path = File.realpath(path)
       data = YAML.load_file(config_path).transform_keys(&:to_sym)
 
-      tape = NativeBtree::Btree.new(NativeBtree::Btree::INT_COMPARATOR)
+      tape = Btree.new(Btree::INT_COMPARATOR)
 
       # Сформируем алфавит
       alpha = {}
