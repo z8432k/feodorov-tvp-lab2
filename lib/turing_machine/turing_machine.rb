@@ -76,12 +76,19 @@ module TuringMachine
       # Тут всё готово чтобы запустить машину
 
       # Обрабатываем пока что-нить не случиться или не придём в конечный стэйт
+      log = File.open('turing.log', "a+")
       loop do
         sleep 0.1
         puts "\nSTATE: #{state}"
-        print_tape(tape, position)
+        log.puts "\nSTATE: #{state}"
 
-        # Чётам видит головка
+        tape_str, head_str = print_tape(tape, position)
+        log.puts tape_str
+        log.puts head_str
+        puts tape_str
+        puts head_str
+
+          # Чётам видит головка
         symbol = tape[position]
         symbol = ' ' if symbol.nil?
 
@@ -97,6 +104,7 @@ module TuringMachine
         end
 
         puts "ACTION: #{action} \n"
+        log.puts "ACTION: #{action} \n"
 
         unless action[:sym].nil?
           tape[position] = action[:sym]
@@ -109,6 +117,7 @@ module TuringMachine
           position += 1
         when STOP
           puts "STOP STATE REACHED. END PROGRAM."
+          log.puts "STOP STATE REACHED. END PROGRAM."
           break
         else
           raise "Fatal error. Can't move head."
@@ -120,6 +129,9 @@ module TuringMachine
       end
 
       puts "Done!"
+      log.puts "Done!"
+
+      log.close
     end
 
     def print_tape(tape, position)
@@ -145,8 +157,7 @@ module TuringMachine
         head << "^"
       end
 
-      puts tape_string
-      puts head
+      [tape_string, head]
     end
   end
 end
